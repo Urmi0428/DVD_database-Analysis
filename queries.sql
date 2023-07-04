@@ -34,6 +34,7 @@ JOIN city ci ON ci.city_id = a.city_id
 JOIN country co ON co.country_id = ci.country_id
 JOIN payment p ON p.customer_id = c.customer_id
 GROUP BY co.country
+ORDER BY co.country;
 
 /*fifth-query Using Union- List of customers that haven't return the DVD*/
 SELECT  CONCAT(first_name,' ', last_name) AS Fullname
@@ -70,10 +71,11 @@ JOIN film_category fi ON f.film_id = fi.film_id
 JOIN category c ON c.category_id = fi.category_id;
 
 /* eighth query - creating View of film and film category */
-CREATE VIEW FilmView AS
-SELECT f.film_id, f.title, c.name as category FROM film f
+ALTER VIEW Filmview AS
+SELECT f.film_id, f.title, c.name FROM film f
 JOIN film_category fc ON fc.film_id = f.film_id
-JOIN category c ON c.category_id = fc.category_id 
+JOIN category c ON c.category_id = fc.category_id;
+SELECT * FROM Filmview
 
 /*ninth query- Create function to search filmcount by category from query eight view */
 CREATE FUNCTION countfilmfromcategory(categoryname text) 
@@ -88,20 +90,26 @@ BEGIN
     RETURN filmCount;
 END;
 $$ LANGUAGE plpgsql;
-SELECT countfilmfromcategory('Action');
+SELECT countfilmfromcategory('Action') AS Actionmoviecount;
 
-/**/
+/*tenth query-The inner subquery calculates the average amount for each film then rank by avg amount*/
+SELECT film_id,customer, amount,average_amount,
+  RANK() OVER (ORDER BY average_amount DESC) AS rank
+FROM
+  (SELECT
+    f.film_id,CONCAT(c.first_name,' ',c.last_name)AS customer,
+    p.amount,
+    AVG(p.amount) OVER (PARTITION BY f.film_id) AS average_amount
+  FROM
+    payment p
+  JOIN rental r ON r.rental_id = p.rental_id
+  JOIN customer c ON c.customer_id = r.customer_id
+  JOIN inventory i ON i.inventory_id = r.inventory_id
+  JOIN film f ON f.film_id = i.film_id) AS subquery
+  ORDER BY film_id;
 
 
 
-
-
-WITH short_film AS (
-	SELECT*FROM film
-	LIMIT 20	   	   )
-select rating, STRING_AGG(description, '54639 ')
-FROM short_film
-GROUP BY rating;
 
 
  
