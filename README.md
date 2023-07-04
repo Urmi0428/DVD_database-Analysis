@@ -67,7 +67,7 @@ UNION
 )
 Order by Fullname;
 ```
-**6. running total payment by paymentdate -Window Function**
+**6. Running total payment by paymentdate ( reset the running total when date change)-Window Function**
 
 ```
 SELECT CONCAT(c.first_name,' ',c.last_name)AS Customer,
