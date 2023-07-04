@@ -122,3 +122,21 @@ SELECT countfilmfromcategory('Action');
 ```
 SELECT countfilmfromcategory('Action');
 ```
+**10. RANK() ,The inner subquery calculates the average amount for each film then rank by avg amount**
+
+```
+SELECT film_id,customer, amount,average_amount,
+  RANK() OVER (ORDER BY average_amount DESC) AS rank
+FROM
+  (SELECT
+    f.film_id,CONCAT(c.first_name,' ',c.last_name)AS customer,
+    p.amount,
+    AVG(p.amount) OVER (PARTITION BY f.film_id) AS average_amount
+  FROM
+    payment p
+  JOIN rental r ON r.rental_id = p.rental_id
+  JOIN customer c ON c.customer_id = r.customer_id
+  JOIN inventory i ON i.inventory_id = r.inventory_id
+  JOIN film f ON f.film_id = i.film_id) AS subquery
+  ORDER BY film_id;
+```
