@@ -17,7 +17,6 @@ Join category c ON c.category_id = fc.category_id
 Group by f.title,c.name
 Having c.name ='Comedy' AND COUNT(a.actor_id)>2;
 ```
-```
 
 **2. Data of customer Linda from Greece**
 
