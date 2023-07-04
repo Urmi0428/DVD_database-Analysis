@@ -4,7 +4,7 @@ The purpose of this project is to analyse the DVD database and present the signi
 ER Diagaram
 ![image](https://github.com/Urmi0428/DVD_database-Analysis/assets/122922168/35af4219-9942-492d-ac01-6d06cf9e8fb0)
 Below is bunch of 10 queries for Analysis of particular area of the database.
-```
+
 
 **1. List of comedy films that have more than two actors**
 
