@@ -6,6 +6,7 @@ ER Diagaram
 Below is bunch of 10 queries for Analysis of particular area of the database.
 <h3>Queries</h3>
 <h2>1.List of comedy films that have more than two actors</h2>
+```
 SELECT f.title as Comedy_Film, COUNT(a.actor_id)as No_of_actor FROM film f
 join film_actor fa ON fa.film_id = f.film_id
 Join actor a on a.actor_id = fa.actor_id
@@ -13,3 +14,4 @@ join film_category fc ON fc.film_id = f.film_id
 Join category c ON c.category_id = fc.category_id
 Group by f.title,c.name
 Having c.name ='Comedy' AND COUNT(a.actor_id)>2
+```
