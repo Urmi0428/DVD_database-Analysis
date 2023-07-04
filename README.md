@@ -67,3 +67,58 @@ UNION
 )
 Order by Fullname;
 ```
+**6. running total payment by paymentdate -Window Function**
+
+```
+SELECT CONCAT(c.first_name,' ',c.last_name)AS Customer,
+CONCAT(s.first_name,' ',s.last_name)AS staff,TO_CHAR(p.payment_date, 'YYYY-MM-DD') AS Date,
+p.amount,SUM(p.amount)
+OVER( PARTITION BY TO_CHAR(p.payment_date, 'YYYY-MM-DD')
+	 ORDER BY p.customer_id ASC) AS running_total
+FROM payment p
+JOIN customer c ON c.customer_id = p.customer_id
+JOIN staff s ON s.staff_id = p.staff_id 
+ORDER BY TO_CHAR(p.payment_date, 'YYYY-MM-DD') ASC;
+```
+**7. Using Union- List of customers that haven't return the DVD**
+
+```
+SELECT f.title, f.rental_duration,c.name,
+       CASE
+           WHEN f.rental_duration > 5 THEN 'Long Duration'
+           WHEN f.rental_duration <= 5 THEN 'Short Duration'
+           ELSE 'Unknown Duration'
+       END AS duration_category
+FROM film f 
+JOIN film_category fi ON f.film_id = fi.film_id
+JOIN category c ON c.category_id = fi.category_id;
+```
+**8. creating View of film and film category **
+
+```
+CREATE VIEW FilmView AS
+SELECT f.film_id, f.title, c.name as category FROM film f
+JOIN film_category fc ON fc.film_id = f.film_id
+JOIN category c ON c.category_id = fc.category_id 
+```
+**9. Create function to search filmcount by category from query eight view**
+
+```
+CREATE FUNCTION countfilmfromcategory(categoryname text) 
+RETURNS integer AS $$
+DECLARE
+    filmCount integer;
+BEGIN
+    SELECT COUNT(*) INTO filmCount
+    FROM Filmview
+    WHERE name = categoryName;
+    
+    RETURN filmCount;
+END;
+$$ LANGUAGE plpgsql;
+SELECT countfilmfromcategory('Action');
+```
+- Run function to search filmcount by category 'Action'**
+```
+SELECT countfilmfromcategory('Action');
+```
