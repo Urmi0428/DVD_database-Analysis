@@ -51,6 +51,7 @@ JOIN city ci ON ci.city_id = a.city_id
 JOIN country co ON co.country_id = ci.country_id
 JOIN payment p ON p.customer_id = c.customer_id
 GROUP BY co.country;
+Heatmap link:https://public.tableau.com/app/profile/urmila.jadeja/viz/CountryviseRevenueDVD_Database/Countryviserevenu?publish=yes
 ```
 **5. Using Union- List of customers that haven't return the DVD**
 
