@@ -94,7 +94,7 @@ JOIN film_category fi ON f.film_id = fi.film_id
 JOIN category c ON c.category_id = fi.category_id;
 ```
 
-**7. creating View of film and film category**
+**7. Creating View of film and film category**
 
 ```
 CREATE VIEW FilmView AS
