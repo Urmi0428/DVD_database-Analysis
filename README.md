@@ -1,6 +1,6 @@
 # DVD_database-Analysis
 Database_Project(DVD)
-The purpose of this project is to analyse the DVD database and present the significant relationas and data to see the revenue and get some predictions for store.
+The purpose of this project is to analyse the DVD database and present the significant relationas and data to see the revenue.
 ER Diagaram
 ![image](https://github.com/Urmi0428/DVD_database-Analysis/assets/122922168/35af4219-9942-492d-ac01-6d06cf9e8fb0)
 Below is bunch of 10 queries for Analysis of particular area of the database.
@@ -79,7 +79,7 @@ JOIN customer c ON c.customer_id = p.customer_id
 JOIN staff s ON s.staff_id = p.staff_id 
 ORDER BY TO_CHAR(p.payment_date, 'YYYY-MM-DD') ASC;
 ```
-**7. Using Union- List of customers that haven't return the DVD**
+**7. List of films with rental duration using CASE**
 
 ```
 SELECT f.title, f.rental_duration,c.name,
