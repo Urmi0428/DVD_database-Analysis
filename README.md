@@ -51,6 +51,7 @@ JOIN city ci ON ci.city_id = a.city_id
 JOIN country co ON co.country_id = ci.country_id
 JOIN payment p ON p.customer_id = c.customer_id
 GROUP BY co.country;
+Heatmap link:https://public.tableau.com/app/profile/urmila.jadeja/viz/CountryviseRevenueDVD_Database/Countryviserevenu?publish=yes
 ```
 **5. Using Union- List of customers that haven't return the DVD**
 
@@ -66,7 +67,7 @@ UNION
 )
 Order by Fullname;
 ```
-**6. running total payment by paymentdate -Window Function**
+**6. Running total payment by paymentdate ( reset the running total when date change)-Window Function**
 
 ```
 SELECT CONCAT(c.first_name,' ',c.last_name)AS Customer,
@@ -93,7 +94,7 @@ JOIN film_category fi ON f.film_id = fi.film_id
 JOIN category c ON c.category_id = fi.category_id;
 ```
 
-**7. creating View of film and film category**
+**7. Creating View of film and film category**
 
 ```
 CREATE VIEW FilmView AS
