@@ -27,7 +27,7 @@ JOIN payment p ON p.customer_id = c.customer_id
 GROUP BY f.title
 ORDER BY  SUM(p.amount) desc ;
 
-/*Country vise revenue*/
+/*fourth Query-Country vise revenue*/
 SELECT co.country, COUNT(c.customer_id) as No_of_Customer, SUM (p.amount) as Revenue_from_country FROM Customer c
 JOIN address a ON a.address_id = c.address_id
 JOIN city ci ON ci.city_id = a.city_id
@@ -35,14 +35,77 @@ JOIN country co ON co.country_id = ci.country_id
 JOIN payment p ON p.customer_id = c.customer_id
 GROUP BY co.country
 
+/*fifth-query Using Union- List of customers that haven't return the DVD*/
+SELECT  CONCAT(first_name,' ', last_name) AS Fullname
+FROM customer
+UNION
+(
+    SELECT CONCAT(first_name,' ', last_name)AS Fullname
+	FROM Customer C
+	JOIN rental r ON r.customer_id = c.customer_id
+    WHERE r.return_date IS NULL
+)
+Order by Fullname;
+
+/*sixth quersy- running total payment by paymentdate -Window Function*/
+SELECT CONCAT(c.first_name,' ',c.last_name)AS Customer,
+CONCAT(s.first_name,' ',s.last_name)AS staff,TO_CHAR(p.payment_date, 'YYYY-MM-DD') AS Date,
+p.amount,SUM(p.amount)
+OVER( PARTITION BY TO_CHAR(p.payment_date, 'YYYY-MM-DD')
+	 ORDER BY p.customer_id ASC) AS running_total
+FROM payment p
+JOIN customer c ON c.customer_id = p.customer_id
+JOIN staff s ON s.staff_id = p.staff_id 
+ORDER BY TO_CHAR(p.payment_date, 'YYYY-MM-DD') ASC;
+
+/*Seventh query -Case*/
+SELECT f.title, f.rental_duration,c.name,
+       CASE
+           WHEN f.rental_duration > 5 THEN 'Long Duration'
+           WHEN f.rental_duration <= 5 THEN 'Short Duration'
+           ELSE 'Unknown Duration'
+       END AS duration_category
+FROM film f 
+JOIN film_category fi ON f.film_id = fi.film_id
+JOIN category c ON c.category_id = fi.category_id;
+
+/* eighth query - creating View of film and film category */
+CREATE VIEW FilmView AS
+SELECT f.film_id, f.title, c.name as category FROM film f
+JOIN film_category fc ON fc.film_id = f.film_id
+JOIN category c ON c.category_id = fc.category_id 
+
+/*ninth query- Create function to search filmcount by category from query eight view */
+CREATE FUNCTION countfilmfromcategory(categoryname text) 
+RETURNS integer AS $$
+DECLARE
+    filmCount integer;
+BEGIN
+    SELECT COUNT(*) INTO filmCount
+    FROM Filmview
+    WHERE name = categoryName;
+    
+    RETURN filmCount;
+END;
+$$ LANGUAGE plpgsql;
+SELECT countfilmfromcategory('Action');
+
 /**/
 
 
 
 
 
+WITH short_film AS (
+	SELECT*FROM film
+	LIMIT 20	   	   )
+select rating, STRING_AGG(description, '54639 ')
+FROM short_film
+GROUP BY rating;
+
 
  
+
 
 
 
